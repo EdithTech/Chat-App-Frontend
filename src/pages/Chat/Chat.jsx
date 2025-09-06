@@ -1,7 +1,7 @@
 import { Button, Input } from "@heroui/react";
 import { FolderPlus, SendHorizontal } from "lucide-react";
 import { MdOutlineAttachment } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LuSendHorizontal } from "react-icons/lu";
 import Message from "../../Components/Message";
 import useChatContext from "../../Config/ChatContext";
@@ -14,6 +14,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [stompClient, setStompClient] = useState(null);
   const [inputMessage, setInputMessage] = useState("");
+  const chatBoxRef = useRef(null);
 
   const {
     roomId,
@@ -35,9 +36,9 @@ const Chat = () => {
 
   // leads the messages when components loads
   useEffect(() => {
-    async function loadMessages() {
+    async function loadMessages(size=50, page=0) {
       try {
-        const messages = await axiosClient.get(`rooms/${roomId}/messages`);
+        const messages = await axiosClient.get(`rooms/${roomId}/messages?size=${size}&page=${page}`);
         // console.log(messages.data);
         setMessages(messages.data);
       } catch (error) {
@@ -53,7 +54,7 @@ const Chat = () => {
 
   useEffect(() => {
     const connectWebSocket = () => {
-      const sock = new SockJS("http://localhost:8080/chat");
+      const sock = new SockJS(`${import.meta.env.VITE_API_BACKEND_URL}/chat`);
       const client = Stomp.over(sock);
 
       client.connect({}, () => {
@@ -94,6 +95,28 @@ const Chat = () => {
     }
   };
 
+  // scroll on new message
+
+  useEffect(() => {
+    if(chatBoxRef.current){
+      chatBoxRef.current.scroll({
+        top: chatBoxRef.current.scrollHeight,
+        behavior : "smooth"
+      })
+    }
+  
+  }, [messages]);
+
+  const leaveRoom = () => {
+    stompClient.disconnect();
+    setConnected(false);
+    setCurrentUser("");
+    setRoomId("");
+
+    naviagate('/room');
+  }
+  
+
   return (
     <div className="w-screen h-svh flex flex-col justify-between">
       {/* // Navbar */}
@@ -101,12 +124,13 @@ const Chat = () => {
         <div>Room ID: {roomId}</div>
         <div>User: {currentUser}</div>
         <div>
-          <Button color="danger">Leave Room</Button>
+          <Button color="danger" onPress={leaveRoom}>Leave Room</Button>
         </div>
       </div>
 
       {/* // chat  */}
       <div
+        ref={chatBoxRef}
         className={`bg-gray-500 flex-1 overflow-y-scroll scrollbar-hide p-3 flex gap-2 flex-col`}
       >
         {messages.map((msg, index) => {
@@ -133,6 +157,11 @@ const Chat = () => {
           className="text-black"
           placeholder="Type a message..."
           value={inputMessage}
+          onKeyDown={(e) => {
+            if(e.key === "Enter"){
+              handleSend();
+            }
+          }}
           onChange={(e) => {
             e.preventDefault();
             setInputMessage(e.target.value);

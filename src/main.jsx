@@ -6,11 +6,11 @@ import { ChatProvider } from "./Config/ChatContext.jsx";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <HeroUIProvider>
       <ChatProvider>
         <AppRoutes />
       </ChatProvider>
     </HeroUIProvider>
-  </StrictMode>
+  // </StrictMode>
 );
