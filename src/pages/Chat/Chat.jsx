@@ -54,7 +54,8 @@ const Chat = () => {
 
   useEffect(() => {
     const connectWebSocket = () => {
-      const sock = new SockJS(`${import.meta.env.VITE_API_BACKEND_URL}/chat`);
+      // const sock = new SockJS(`${import.meta.env.VITE_API_BACKEND_URL}/chat`);
+      const sock = new SockJS(`https://chat-app-00bw.onrender.com/chat`);
       const client = Stomp.over(sock);
 
       client.connect({}, () => {
