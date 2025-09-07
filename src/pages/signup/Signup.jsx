@@ -1,9 +1,9 @@
 import { Button, Input } from "@heroui/react";
 import React from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const Signup = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
   return (
     <div className="w-screen h-screen flex items-center justify-center ">
