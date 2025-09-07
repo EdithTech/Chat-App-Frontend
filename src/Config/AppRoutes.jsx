@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import App from "../App";
-import JoinRoom from "../pages/room/JoinRoom";
-import Chat from "../Pages/Chat/Chat.jsx";
+import JoinRoom from "../pages/room/JoinRoom.jsx";
 import Signup from "../pages/signup/signup";
+import Chat from "../pages/chat/Chat";
 
 const AppRoutes = () => {
   return (
