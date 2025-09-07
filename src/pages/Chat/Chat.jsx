@@ -1,7 +1,6 @@
 import { Button, Input } from "@heroui/react";
-import { FolderPlus, SendHorizontal } from "lucide-react";
 import { MdOutlineAttachment } from "react-icons/md";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LuSendHorizontal } from "react-icons/lu";
 import Message from "../../Components/Message";
 import useChatContext from "../../Config/ChatContext";
